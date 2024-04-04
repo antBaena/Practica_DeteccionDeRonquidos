@@ -1,19 +1,32 @@
 package org.mps.ronqi2;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.mps.dispositivo.Dispositivo;
+import org.mps.dispositivo.DispositivoSilver;
 
+@ExtendWith(MockitoExtension.class)
 public class ronQI2Silvertest {
 
     RonQI2 ronqi2;
-    Dispositivo dispositivo;
+
+    @Mock(lenient = true)
+    DispositivoSilver dispositivo;
 
     @BeforeEach
     public void setUp() {
-        dispositivo = mock(Dispositivo.class);
         ronqi2 = new RonQI2Silver();
+        ronqi2.disp = dispositivo;
     }
 
     /*
@@ -25,7 +38,217 @@ public class ronQI2Silvertest {
      * debería devolver true. En cualquier otro caso false. Se deja programado un
      * ejemplo.
      */
+    @Nested
+    @DisplayName("metodo inicializar")
+    class Inicializar {
+        @DisplayName("El metodo inicializar debe devolver true si se conectan y configuran ambos sensores correctamente")
+        @Test
+        public void Inicializar_todoCorrecto_DevuelveTrue() {
+            when(dispositivo.conectarSensorPresion()).thenReturn(true);
+            when(dispositivo.conectarSensorSonido()).thenReturn(true);
+            when(dispositivo.configurarSensorPresion()).thenReturn(true);
+            when(dispositivo.configurarSensorSonido()).thenReturn(true);
 
+            boolean resultado = ronqi2.inicializar();
+
+            assertTrue(resultado);
+        }
+
+        @DisplayName("El metodo inicializar debe devolver false si no se conectan ni configuran los sensores correctamente")
+        @Test
+        public void Inicializar_noConectaNiConfigura_DevuelveFalse() {
+            when(dispositivo.conectarSensorPresion()).thenReturn(false);
+            when(dispositivo.conectarSensorSonido()).thenReturn(false);
+            when(dispositivo.configurarSensorPresion()).thenReturn(false);
+            when(dispositivo.configurarSensorSonido()).thenReturn(false);
+
+            boolean resultado = ronqi2.inicializar();
+
+            assertFalse(resultado);
+        }
+
+        @DisplayName("El metodo inicializar debe devolver false si no se conectan el Sensor de Presion")
+        @Test
+        public void Inicializar_noConectaPresion_DevuelveFalse() {
+            when(dispositivo.conectarSensorPresion()).thenReturn(false);
+            when(dispositivo.conectarSensorSonido()).thenReturn(true);
+            when(dispositivo.configurarSensorPresion()).thenReturn(true);
+            when(dispositivo.configurarSensorSonido()).thenReturn(true);
+
+            boolean resultado = ronqi2.inicializar();
+
+            assertFalse(resultado);
+        }
+
+        @DisplayName("El metodo inicializar debe devolver false si no se conectan el Sensor de Sonido")
+        @Test
+        public void Inicializar_noConectaSonido_DevuelveFalse() {
+            when(dispositivo.conectarSensorPresion()).thenReturn(true);
+            when(dispositivo.conectarSensorSonido()).thenReturn(false);
+            when(dispositivo.configurarSensorPresion()).thenReturn(true);
+            when(dispositivo.configurarSensorSonido()).thenReturn(true);
+
+            boolean resultado = ronqi2.inicializar();
+
+            assertFalse(resultado);
+        }
+
+        @DisplayName("El metodo inicializar debe devolver false si no se configura el Sensor de Presion")
+        @Test
+        public void Inicializar_noConfiguraPresion_DevuelveFalse() {
+            when(dispositivo.conectarSensorPresion()).thenReturn(true);
+            when(dispositivo.conectarSensorSonido()).thenReturn(true);
+            when(dispositivo.configurarSensorPresion()).thenReturn(false);
+            when(dispositivo.configurarSensorSonido()).thenReturn(true);
+
+            boolean resultado = ronqi2.inicializar();
+
+            assertFalse(resultado);
+        }
+
+        @DisplayName("El metodo inicializar debe devolver false si no se configura el Sensor de Sonido")
+        @Test
+        public void Inicializar_noConfiguraSonido_DevuelveFalse() {
+            when(dispositivo.conectarSensorPresion()).thenReturn(true);
+            when(dispositivo.conectarSensorSonido()).thenReturn(true);
+            when(dispositivo.configurarSensorPresion()).thenReturn(true);
+            when(dispositivo.configurarSensorSonido()).thenReturn(false);
+
+            boolean resultado = ronqi2.inicializar();
+
+            assertFalse(resultado);
+        }
+
+        @DisplayName("El metodo inicializar debe devolver false si no se conecta ni configura el sensor de sonido")
+        @Test
+        public void Inicializar_noConectaNiConfiguraSonido_DevuelveFalse() {
+            when(dispositivo.conectarSensorPresion()).thenReturn(true);
+            when(dispositivo.conectarSensorSonido()).thenReturn(false);
+            when(dispositivo.configurarSensorPresion()).thenReturn(true);
+            when(dispositivo.configurarSensorSonido()).thenReturn(false);
+
+            boolean resultado = ronqi2.inicializar();
+
+            assertFalse(resultado);
+        }
+
+        @DisplayName("El metodo inicializar debe devolver false si no se conecta ni configura el sensor de presion")
+        @Test
+        public void Inicializar_noConectaNiConfiguraPresion_DevuelveFalse() {
+            when(dispositivo.conectarSensorPresion()).thenReturn(false);
+            when(dispositivo.conectarSensorSonido()).thenReturn(true);
+            when(dispositivo.configurarSensorPresion()).thenReturn(false);
+            when(dispositivo.configurarSensorSonido()).thenReturn(true);
+
+            boolean resultado = ronqi2.inicializar();
+
+            assertFalse(resultado);
+        }
+
+        @DisplayName("El metodo inicializar debe devolver false si no se conecta el sensor de sonido y no se configura el sensor de presion")
+        @Test
+        public void Inicializar_noConectaSonidoNiConfiguraPresion_DevuelveFalse() {
+            when(dispositivo.conectarSensorPresion()).thenReturn(true);
+            when(dispositivo.conectarSensorSonido()).thenReturn(false);
+            when(dispositivo.configurarSensorPresion()).thenReturn(false);
+            when(dispositivo.configurarSensorSonido()).thenReturn(true);
+
+            boolean resultado = ronqi2.inicializar();
+
+            assertFalse(resultado);
+        }
+
+        @DisplayName("El metodo inicializar debe devolver false si no se conecta el sensor de presion y no se configura el sensor de sonido")
+        @Test
+        public void Inicializar_noConectaPresionNiConfiguraSonido_DevuelveFalse() {
+            when(dispositivo.conectarSensorPresion()).thenReturn(false);
+            when(dispositivo.conectarSensorSonido()).thenReturn(true);
+            when(dispositivo.configurarSensorPresion()).thenReturn(true);
+            when(dispositivo.configurarSensorSonido()).thenReturn(false);
+
+            boolean resultado = ronqi2.inicializar();
+
+            assertFalse(resultado);
+        }
+
+        @DisplayName("El metodo inicializar debe devolver false si no se conecta el sensor de sonido y no se conecta el sensor de presion")
+        @Test
+        public void Inicializar_noConectaSonidoNiConectaPresion_DevuelveFalse() {
+            when(dispositivo.conectarSensorPresion()).thenReturn(false);
+            when(dispositivo.conectarSensorSonido()).thenReturn(false);
+            when(dispositivo.configurarSensorPresion()).thenReturn(true);
+            when(dispositivo.configurarSensorSonido()).thenReturn(true);
+
+            boolean resultado = ronqi2.inicializar();
+
+            assertFalse(resultado);
+        }
+
+        @DisplayName("El metodo inicializar debe devolver false si no se configura el sensor de sonido y no se configura el sensor de presion")
+        @Test
+        public void Inicializar_noConfiguraSonidoNiConfiguraPresion_DevuelveFalse() {
+            when(dispositivo.conectarSensorPresion()).thenReturn(true);
+            when(dispositivo.conectarSensorSonido()).thenReturn(true);
+            when(dispositivo.configurarSensorPresion()).thenReturn(false);
+            when(dispositivo.configurarSensorSonido()).thenReturn(false);
+
+            boolean resultado = ronqi2.inicializar();
+
+            assertFalse(resultado);
+        }
+
+        @DisplayName("El metodo inicializar debe devolver false si no se conecta ni configura el sensor de sonido y no se conecta el sensor de presion")
+        @Test
+        public void Inicializar_noConectaNiConfiguraSonidoNiConectaPresion_DevuelveFalse() {
+            when(dispositivo.conectarSensorPresion()).thenReturn(false);
+            when(dispositivo.conectarSensorSonido()).thenReturn(false);
+            when(dispositivo.configurarSensorPresion()).thenReturn(true);
+            when(dispositivo.configurarSensorSonido()).thenReturn(false);
+
+            boolean resultado = ronqi2.inicializar();
+
+            assertFalse(resultado);
+        }
+
+        @DisplayName("El metodo inicializar debe devolver false si no se conecta ni configura el sensor de sonido y no se configura el sensor de presion")
+        @Test
+        public void Inicializar_noConectaNiConfiguraSonidoNiConfiguraPresion_DevuelveFalse() {
+            when(dispositivo.conectarSensorPresion()).thenReturn(true);
+            when(dispositivo.conectarSensorSonido()).thenReturn(false);
+            when(dispositivo.configurarSensorPresion()).thenReturn(false);
+            when(dispositivo.configurarSensorSonido()).thenReturn(false);
+
+            boolean resultado = ronqi2.inicializar();
+
+            assertFalse(resultado);
+        }
+
+        @DisplayName("El metodo inicializar debe devolver false si no se conecta ni configura el sensor de presion y no se conecta el sensor de sonido")
+        @Test
+        public void Inicializar_noConectaNiConfiguraPresionNiConectaSonido_DevuelveFalse() {
+            when(dispositivo.conectarSensorPresion()).thenReturn(false);
+            when(dispositivo.conectarSensorSonido()).thenReturn(true);
+            when(dispositivo.configurarSensorPresion()).thenReturn(false);
+            when(dispositivo.configurarSensorSonido()).thenReturn(false);
+
+            boolean resultado = ronqi2.inicializar();
+
+            assertFalse(resultado);
+        }
+
+        @DisplayName("El metodo inicializar debe devolver false si no se conecta ni configura el sensor de presion y no se configura el sensor de sonido")
+        @Test
+        public void Inicializar_noConectaNiConfiguraPresionNiConfiguraSonido_DevuelveFalse() {
+            when(dispositivo.conectarSensorPresion()).thenReturn(false);
+            when(dispositivo.conectarSensorSonido()).thenReturn(false);
+            when(dispositivo.configurarSensorPresion()).thenReturn(false);
+            when(dispositivo.configurarSensorSonido()).thenReturn(true);
+
+            boolean resultado = ronqi2.inicializar();
+
+            assertFalse(resultado);
+        }
+    }
     /*
      * Un inicializar debe configurar ambos sensores, comprueba que cuando se
      * inicializa de forma correcta (el conectar es true),
