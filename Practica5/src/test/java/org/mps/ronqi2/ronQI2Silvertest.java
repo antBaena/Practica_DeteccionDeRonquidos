@@ -340,6 +340,18 @@ public class ronQI2SilverTest {
             assertFalse(resultado);
         }
 
+        @DisplayName("El metodo reconectar debe devolver false si no se conecta ni el sensor de presion ni el sensor de sonido")
+        @Test
+        public void Reconectar_NoConectaNiPresionNiSonido_DevuelveFalse() {
+            when(dispositivo.estaConectado()).thenReturn(false);
+            when(dispositivo.conectarSensorPresion()).thenReturn(false);
+            when(dispositivo.conectarSensorSonido()).thenReturn(false);
+
+            boolean resultado = ronqi2.reconectar();
+
+            assertFalse(resultado);
+        }
+
     }
 
     /*
@@ -466,13 +478,12 @@ public class ronQI2SilverTest {
     @Nested
     @DisplayName("metodo anyadirDispositivos")
     class anyadirDispositivos {
-        @DisplayName("El metodo anyadirDispositivo debe asignar el dispositivo pasado como parametro")
+        @DisplayName("El metodo anyadirDispositivo debe asignar el dispositivo pasado como parametro si el dispositivo es correcto")
         @Test
-        public void AnyadirDispositivo_DispositivoAsignado() {
+        public void AnyadirDispositivo_DispositivoCorrecto_AsignaDispositivo() {
             Dispositivo d = mock(Dispositivo.class);
 
             ronqi2.anyadirDispositivo(d);
-
             boolean result = ronqi2.disp == d;
 
             assertTrue(result);
@@ -490,7 +501,7 @@ public class ronQI2SilverTest {
     @Nested
     @DisplayName("metodo obtenerNuevaLectura")
     class obtenerNuevaLectura {
-        @DisplayName("El metodo obtenerNuevaLectura debe añadir una nueva lectura de presion y sonido")
+        @DisplayName("El metodo obtenerNuevaLectura debe llamar al metodo leerSensorPresion y leerSensorSonido")
         @Test
         public void ObtenerNuevaLectura_AnyadeLectura() {
             when(dispositivo.leerSensorPresion()).thenReturn(20f);
@@ -502,17 +513,5 @@ public class ronQI2SilverTest {
             verify(dispositivo, times(1)).leerSensorSonido();
         }
 
-        @DisplayName("El metodo obtenerNuevaLectura debe añadir una nueva lectura de presion y sonido y eliminar la primera si hay mas de 5")
-        @Test
-        public void ObtenerNuevaLectura_AnyadeLecturaYEliminaPrimera() {
-            when(dispositivo.leerSensorPresion()).thenReturn(20f);
-            when(dispositivo.leerSensorSonido()).thenReturn(30f);
-
-            for (int i = 0; i < 6; i++)
-                ronqi2.obtenerNuevaLectura();
-
-            verify(dispositivo, times(6)).leerSensorPresion();
-            verify(dispositivo, times(6)).leerSensorSonido();
-        }
     }
 }

@@ -25,9 +25,7 @@ public class RonQI2Silver extends RonQI2 {
      * contenedores.
      */
     public void obtenerNuevaLectura() {
-        // TODO: Error encontrado Cambiar el valor de la variable
-        // disp.leerSensorPresion() a
-        // disp.leerSensorSonido
+
         lecturasP.add(disp.leerSensorPresion());
         if (lecturasP.size() > numLecturas) {
             lecturasP.remove(0);
@@ -58,13 +56,12 @@ public class RonQI2Silver extends RonQI2 {
                 .orElse(0.0);
 
         boolean resultado;
-        if (avgP >= thresholdP && avgS > thresholdS) {
+        if (avgP > thresholdP && avgS > thresholdS) {
             resultado = true;
         } else {
             resultado = false;
         }
 
-        // TODO: Error econtrado Cambiar el valor de la variable resultado a true
         return resultado;
     }
 

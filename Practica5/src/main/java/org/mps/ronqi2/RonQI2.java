@@ -25,7 +25,6 @@ public abstract class RonQI2 {
      */
     public abstract void obtenerNuevaLectura();
 
-    // TODO: Comprobar not null
     public void anyadirDispositivo(Dispositivo d) {
         if (d == null)
             throw new IllegalArgumentException("El dispositivo no puede ser nulo");
