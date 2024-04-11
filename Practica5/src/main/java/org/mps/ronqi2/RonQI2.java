@@ -5,49 +5,55 @@ import org.mps.dispositivo.Dispositivo;
 public abstract class RonQI2 {
     protected Dispositivo disp;
 
-    /* 
-     * Inicializa el sistema ronQI2 configurando los dos sensores del dispositivo conectado.
-    */
-    public boolean inicializar(){
+    /*
+     * Inicializa el sistema ronQI2 configurando los dos sensores del dispositivo
+     * conectado.
+     */
+    public boolean inicializar() {
         boolean result = false;
-        if (disp.conectarSensorPresion()){
+        if (disp.conectarSensorPresion()) {
             boolean confPresion = disp.configurarSensorPresion();
-            if (disp.conectarSensorSonido()){
+            if (disp.conectarSensorSonido()) {
                 result = disp.configurarSensorSonido() && confPresion;
             }
         }
-        return result;   
+        return result;
     }
 
-    /* 
+    /*
      * Lee y almacena las lecturas de presion y sonido del dispositivo.
-    */
+     */
     public abstract void obtenerNuevaLectura();
 
-    public void anyadirDispositivo(Dispositivo d){
+    public void anyadirDispositivo(Dispositivo d) {
+        if (d == null)
+            throw new IllegalArgumentException("El dispositivo no puede ser nulo");
+
         disp = d;
     }
 
-    /* 
+    /*
      * Reconecta el dispositivo cuando esta desconectado.
-    */
-    public boolean reconectar(){
+     */
+    public boolean reconectar() {
         boolean result = false;
-        if (!disp.estaConectado()){
+        if (!disp.estaConectado()) {
             result = disp.conectarSensorPresion() && disp.conectarSensorSonido();
         }
         return result;
     }
 
-    /* 
+    /*
      * Evalua la apnea del suenyo con las medidas recogidas.
-    */
+     */
     public abstract boolean evaluarApneaSuenyo();
-    
-    /* 
+
+    /*
+     * TODO: El comentario de esta función es erróneo, ya que devuelve si el
+     * dispositivo está conectado
      * Lee y almacena las lecturas de presion y sonido del dispositivo.
-    */
-    public boolean estaConectado(){
+     */
+    public boolean estaConectado() {
         return disp.estaConectado();
-    }    
+    }
 }
