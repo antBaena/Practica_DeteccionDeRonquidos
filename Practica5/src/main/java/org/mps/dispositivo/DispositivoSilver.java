@@ -1,6 +1,11 @@
+/*
+@author Antonio Cañete Baena
+@author Antonio Blas Moral Sánchez
+*/
 package org.mps.dispositivo;
-public class DispositivoSilver extends Dispositivo{
-    
+
+public class DispositivoSilver extends Dispositivo {
+
     public DispositivoSilver() {
         configuracionPresion = "configuracionPresionSilver";
         configuracionSonido = "configuracionSonidoSilver";
@@ -48,5 +53,4 @@ public class DispositivoSilver extends Dispositivo{
         return false;
     }
 
-    
 }
