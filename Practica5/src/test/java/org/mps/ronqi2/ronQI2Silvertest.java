@@ -363,9 +363,6 @@ public class ronQI2SilverTest {
     @DisplayName("metodo evaluarApneaSuenyo")
     class evaluarApneaSuenyo {
 
-        /*
-         * TODO Preguntar si se puede usar for en el test
-         */
         @DisplayName("El método evaluarApneaSuenyo debe devolver false si media de las lecturas son nomales")
         @ParameterizedTest
         @ValueSource(ints = { 1, 2, 3, 4, 5, 10 })
@@ -479,6 +476,43 @@ public class ronQI2SilverTest {
             boolean result = ronqi2.disp == d;
 
             assertTrue(result);
+        }
+
+        @DisplayName("El metodo anyadirDispositivo debe lanzar una excepcion si el dispositivo es nulo")
+        @Test
+        public void AnyadirDispositivo_DispositivoNulo_LanzaExcepcion() {
+            Assertions.assertThrows(IllegalArgumentException.class, () -> {
+                ronqi2.anyadirDispositivo(null);
+            });
+        }
+    }
+
+    @Nested
+    @DisplayName("metodo obtenerNuevaLectura")
+    class obtenerNuevaLectura {
+        @DisplayName("El metodo obtenerNuevaLectura debe añadir una nueva lectura de presion y sonido")
+        @Test
+        public void ObtenerNuevaLectura_AnyadeLectura() {
+            when(dispositivo.leerSensorPresion()).thenReturn(20f);
+            when(dispositivo.leerSensorSonido()).thenReturn(30f);
+
+            ronqi2.obtenerNuevaLectura();
+
+            verify(dispositivo, times(1)).leerSensorPresion();
+            verify(dispositivo, times(1)).leerSensorSonido();
+        }
+
+        @DisplayName("El metodo obtenerNuevaLectura debe añadir una nueva lectura de presion y sonido y eliminar la primera si hay mas de 5")
+        @Test
+        public void ObtenerNuevaLectura_AnyadeLecturaYEliminaPrimera() {
+            when(dispositivo.leerSensorPresion()).thenReturn(20f);
+            when(dispositivo.leerSensorSonido()).thenReturn(30f);
+
+            for (int i = 0; i < 6; i++)
+                ronqi2.obtenerNuevaLectura();
+
+            verify(dispositivo, times(6)).leerSensorPresion();
+            verify(dispositivo, times(6)).leerSensorSonido();
         }
     }
 }

@@ -25,7 +25,8 @@ public class RonQI2Silver extends RonQI2 {
      * contenedores.
      */
     public void obtenerNuevaLectura() {
-        // Error encontrado Cambiar el valor de la variable disp.leerSensorPresion() a
+        // TODO: Error encontrado Cambiar el valor de la variable
+        // disp.leerSensorPresion() a
         // disp.leerSensorSonido
         lecturasP.add(disp.leerSensorPresion());
         if (lecturasP.size() > numLecturas) {
@@ -56,16 +57,15 @@ public class RonQI2Silver extends RonQI2 {
                 .average()
                 .orElse(0.0);
 
-        /*
-         * if (avgP >= thresholdP && avgS > thresholdS) {
-         * resultado = false;
-         * } else {
-         * resultado = true;
-         * }
-         */
+        boolean resultado;
+        if (avgP >= thresholdP && avgS > thresholdS) {
+            resultado = true;
+        } else {
+            resultado = false;
+        }
 
-        // Error econtrado Cambiar el valor de la variable resultado a true
-        return (avgP >= thresholdP && avgS > thresholdS);
+        // TODO: Error econtrado Cambiar el valor de la variable resultado a true
+        return resultado;
     }
 
 }
